@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: b9bd8297-e551-4934-977b-d5ed4bf7890e
+      url: 'https://ethanwarren.netlify.app'
