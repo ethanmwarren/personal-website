@@ -7,9 +7,7 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: about
-        text: About
-      - href: projects
+      - href: projects/index.qmd
         text: Projects
     right: 
       - icon: github
@@ -20,9 +18,9 @@ website:
             url:  https://github.com/ethanmwarren
   page-footer:
     right: "&copy; 2024, Ethan Warren"
-  comments:
-    utterances:
-      repo: ethanmwarren/personal-website
+#  comments:
+#    utterances:
+#      repo: ethanmwarren/personal-website
 
 format:
   html:

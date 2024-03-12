@@ -4,14 +4,14 @@
     "href": "index.html",
     "title": "Ethan Warren",
     "section": "",
-    "text": "Hi, I’m Ethan, a 4th-year undergrad student at UCLA specializing in Statistics and Data Science, with a minor in Math. My academic journey has been an exhilarating blend of rigorous coursework, hands-on projects, and collaborative research, enabling me to develop a robust analytical skillset, proficiency in statistical software, and a deep understanding of data-driven decision-making processes.\nI’m excited by the recent developments in artificial intelligence and machine learning, and I’m eager to apply these fields in creative ways to solve complex problems. I’m passionate about leveraging data to solve real-world problems, optimize processes, and inform strategy. As I approach the culmination of my undergraduate studies, I’m eager to apply my skills in a dynamic environment that challenges me to grow and contribute to impactful projects.\nHead to my projects tab to learn more about some of the research and projects I’ve worked on, and click on the about tab to learn a little bit more about me!"
+    "text": "Hi, I’m Ethan, a 4th-year undergrad student at UCLA specializing in Statistics and Data Science, with a minor in Math. My academic journey has been an exhilarating blend of rigorous coursework, hands-on projects, and collaborative research, enabling me to develop a robust analytical skillset, proficiency in statistical software, and a deep understanding of data-driven decision-making processes.\nI’m excited by the recent developments in artificial intelligence and machine learning, and I’m eager to apply these fields in creative ways to solve complex problems. I’m passionate about leveraging data to solve real-world problems, optimize processes, and inform strategy. As I approach the culmination of my undergraduate studies, I’m eager to apply my skills in a dynamic environment that challenges me to grow and contribute to impactful projects. Here’s a link to my Resume.\nHead to my projects tab to learn more about some of the research and projects I’ve worked on that combine a lot of the things that fascinate me with AI and ML."
   },
   {
-    "objectID": "index.html#welcome",
-    "href": "index.html#welcome",
+    "objectID": "index.html#about-me",
+    "href": "index.html#about-me",
     "title": "Ethan Warren",
     "section": "",
-    "text": "Hi, I’m Ethan, a 4th-year undergrad student at UCLA specializing in Statistics and Data Science, with a minor in Math. My academic journey has been an exhilarating blend of rigorous coursework, hands-on projects, and collaborative research, enabling me to develop a robust analytical skillset, proficiency in statistical software, and a deep understanding of data-driven decision-making processes.\nI’m excited by the recent developments in artificial intelligence and machine learning, and I’m eager to apply these fields in creative ways to solve complex problems. I’m passionate about leveraging data to solve real-world problems, optimize processes, and inform strategy. As I approach the culmination of my undergraduate studies, I’m eager to apply my skills in a dynamic environment that challenges me to grow and contribute to impactful projects.\nHead to my projects tab to learn more about some of the research and projects I’ve worked on, and click on the about tab to learn a little bit more about me!"
+    "text": "Hi, I’m Ethan, a 4th-year undergrad student at UCLA specializing in Statistics and Data Science, with a minor in Math. My academic journey has been an exhilarating blend of rigorous coursework, hands-on projects, and collaborative research, enabling me to develop a robust analytical skillset, proficiency in statistical software, and a deep understanding of data-driven decision-making processes.\nI’m excited by the recent developments in artificial intelligence and machine learning, and I’m eager to apply these fields in creative ways to solve complex problems. I’m passionate about leveraging data to solve real-world problems, optimize processes, and inform strategy. As I approach the culmination of my undergraduate studies, I’m eager to apply my skills in a dynamic environment that challenges me to grow and contribute to impactful projects. Here’s a link to my Resume.\nHead to my projects tab to learn more about some of the research and projects I’ve worked on that combine a lot of the things that fascinate me with AI and ML."
   },
   {
     "objectID": "projects/Classifying penguins/index.html",
@@ -25,7 +25,7 @@
     "href": "projects/index.html",
     "title": "Projects",
     "section": "",
-    "text": "Here is some text about my projects.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPenguins Classification\n\n\n\n\n\n\nmachine learning\n\n\nscience\n\n\nunsupervised learning\n\n\n\nHow a study from 1959 on 100 patients created one of the most enduring myths about human weight and nutrition.\n\n\n\n\n\nDec 27, 2023\n\n\n\n\n\n\nNo matching items"
+    "text": "Penguins Classification\n\n\n\n\n\n\nmachine learning\n\n\nscience\n\n\nunsupervised learning\n\n\n\nClassifying penguins into their species given information about their height, weight, beak length, etc.\n\n\n\n\n\nDec 27, 2023\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about/index.html",
