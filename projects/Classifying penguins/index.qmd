@@ -4,10 +4,11 @@ categories:
 - science
 - unsupervised learning
 date: 2023-12-27
-description: Classifying penguins into their species given information about their height, weight, beak length, etc.
-comments: false
+description: "Training a machine learning model to predict a penguin's species given information about it's physical characteristics and other data."
+google-scholar: true
 image: penguins.jpg
 title: Penguins Classification
+comments: false
 ---
 
-For this project I was classifying penguins into their species given information about their height, either, beak length, etc.
+For this project I was classifying penguins into their species given information about their height, either, beak length, etc. Read this [pdf](/Final_project-3.pdf "pdf") to learn more!
