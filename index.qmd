@@ -17,8 +17,12 @@ comments: false
 toc: false
 ---
 
-## About me
+## Welcome
+
 Hi, I’m Ethan, a 4th-year undergrad student at UCLA specializing in Statistics and Data Science, with a minor in Math. My academic journey has been an exhilarating blend of rigorous coursework, hands-on projects, and collaborative research, enabling me to develop a robust analytical skillset, proficiency in statistical software, and a deep understanding of data-driven decision-making processes. 
 
 I'm excited by the recent developments in artificial intelligence and machine learning, and I'm eager to apply these fields in creative ways to solve complex problems. I'm passionate about leveraging data to solve real-world problems, optimize processes, and inform strategy. As I approach the culmination of my undergraduate studies, I'm eager to apply my skills in a dynamic environment that challenges me to grow and contribute to impactful projects. 
+
+Head to my projects tab to learn more about some of the research and projects I've worked on, and click on the about tab to learn a little bit more about me!
+
 

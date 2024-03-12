@@ -1,0 +1,15 @@
+---
+categories:
+- machine learning
+- science
+- unsupervised learning
+date: 2023-12-27
+description: How a study from 1959 on 100 patients created one of the most enduring
+  myths about human weight and nutrition.
+google-scholar: true
+image: penguins.jpg
+title: Penguins Classification
+comments: false
+---
+
+For this project I was classifying penguins into their species given information about their height, either, beak length, etc.
