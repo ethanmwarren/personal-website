@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2023-12-27">
-<meta name="description" content="Training a machine learning model to predict a penguin’s species given information about it’s physical characteristics and other data.">
+<meta name="author" content="Chen Guan, Lucas MacHardy, Ethan Warren">
+<meta name="dcterms.date" content="2022-06-02">
+<meta name="description" content="Training a classical machine learning model to predict a penguin’s species from physical characteristics.">
 
 <title>Penguins Classification</title>
 <style>
@@ -72,10 +73,11 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="../../styles.css">
 <meta name="citation_title" content="Penguins Classification">
-<meta name="citation_publication_date" content="2023-12-27">
-<meta name="citation_cover_date" content="2023-12-27">
-<meta name="citation_year" content="2023">
-<meta name="citation_online_date" content="2023-12-27">
+<meta name="citation_author" content="Chen Guan, Lucas MacHardy, Ethan Warren">
+<meta name="citation_publication_date" content="2022-06-02">
+<meta name="citation_cover_date" content="2022-06-02">
+<meta name="citation_year" content="2022">
+<meta name="citation_online_date" content="2022-06-02">
 <meta name="citation_language" content="en">
 </head>
 
@@ -147,18 +149,24 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    Training a machine learning model to predict a penguin’s species given information about it’s physical characteristics and other data.
+    Training a classical machine learning model to predict a penguin’s species from physical characteristics.
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chen Guan, Lucas MacHardy, Ethan Warren </p>
+          </div>
+  </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 27, 2023</p>
+      <p class="date">June 2, 2022</p>
     </div>
   </div>
   
@@ -170,7 +178,70 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>For this project I was classifying penguins into their species given information about their height, either, beak length, etc. Read this <a href="../../Final_project-3.pdf" title="pdf">pdf</a> to learn more!</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../projects/Classifying Penguins/penguins.jpg" class="img-fluid figure-img"></p>
+<figcaption>Penguins</figcaption>
+</figure>
+</div>
+<p><strong>Project Overview</strong></p>
+<p>As part of an introductory Python class focused on machine learning, our team was tasked with a comprehensive project to classify penguin species using a provided dataset. The dataset contained various attributes of penguins, including but not limited to species type, body measurements (culmen length and depth, flipper length, body mass), and ecological data (island, region, sex, and isotopic composition). Our objective was to conduct a full analysis of this dataset, which entailed extensive data cleaning, handling missing values, and exploratory data analysis to identify significant features for model building.</p>
+<p>The project’s phases were methodically structured: initially, we performed a thorough analysis to understand the data’s characteristics and distributions. This step was crucial for our subsequent data cleaning process, where we addressed missing entries and potential outliers to ensure the integrity of our modeling data. We then split the data into training and test sets to evaluate the performance and generalizability of our models.</p>
+<p>In the modeling phase, we explored several algorithms including Multinomial Logistic Regression (MLR), Random Forest, and Support Vector Machines (SVM) to determine which model best fit our data. After a comparative analysis of each model’s performance, Multinomial Logistic Regression was selected as the most effective model based on its accuracy and the interpretability of its results. This model allowed us to classify the penguin species with a high degree of confidence, using the most predictive features derived from our exploratory analysis.</p>
+<p>This project not only reinforced our understanding of machine learning concepts and techniques but also provided practical experience in data handling, feature selection, and model evaluation—essential skills for any aspiring data scientist.</p>
+<p><strong>Data Used</strong></p>
+<p>The project utilized the Palmer Penguins dataset, a compilation of 344 observations and 17 features including species classification, physical measurements (like culmen length and depth, flipper length, body mass), and ecological data (region, island, sex, dietary isotopes). However, to streamline our analysis and enhance the model’s performance, we refined the dataset by removing columns with excessive missing values or those less relevant for species classification such as comments, sample number, and date of egg collection. The cleansing process was carefully designed to retain potentially predictive attributes, ensuring a robust dataset for building our classification model.</p>
+<p><strong>Tools and Technologies</strong></p>
+<p>Our toolset for this project was selected to handle both data manipulation and machine learning tasks effectively:</p>
+<ol type="1">
+<li><strong>Python</strong> served as the programming language, providing a flexible and powerful base for data science operations.</li>
+<li><strong>Sci-Kit Learn</strong> was employed for implementing and evaluating various machine learning models due to its extensive library of algorithms and preprocessing methods.</li>
+<li><strong>NumPy</strong> and <strong>Pandas</strong> were crucial for data manipulation tasks, allowing for efficient handling and transformation of data structures.</li>
+<li><strong>Matplotlib</strong> and <strong>Seaborn</strong> were used for exploratory data analysis, enabling us to visualize distributions and relationships in the data effectively, which informed subsequent feature selection and model tuning.</li>
+</ol>
+<p><strong>Methodology</strong></p>
+<p>The methodology adopted for this project was meticulous and divided into several clear stages:</p>
+<p><strong>1. Data Cleaning and Preprocessing</strong><br>
+</p>
+<p>Our team developed a function to clean and preprocess the dataset by dropping non-essential columns, encoding categorical variables, and since there weren’t many, dropping rows with any missing values. This process resulted in a concise dataset with 11 meaningful features, retaining only the rows that provided complete information.<br>
+</p>
+<p><strong>2. Data Splitting</strong><br>
+</p>
+<p>The data was split into an 80% training set and a 20% test set, and then each set was cleaned and preprocessed independently, ensuring that both sets reflected the full variety of data to avoid model bias.<br>
+</p>
+<p><strong>3. Exploratory Data Analysis (EDA)</strong><br>
+</p>
+<p>Prior to modeling, we conducted thorough exploratory analysis to understand the underlying patterns and relationships in the data. This analysis was pivotal in selecting the most informative features for the models.</p>
+<p>The EDA began with grouping the dataset by species and sex to compute summary statistics for each group across all quantitative features. To visualize the relationships between variables, we utilized Seaborn’s pair plot tool, color-coding each of the three penguin species. This visualization helped us identify significant clusters, indicating strong differentiation potential between species based on certain feature combinations.</p>
+<p>Notably, the relationships between culmen length vs.&nbsp;flipper length, body mass vs.&nbsp;culmen length, and culmen depth vs.&nbsp;culmen length exhibited distinct clusters that were promising for classification. Additionally, histograms for culmen length and culmen depth—grouped by species—revealed unique patterns. These distributions showed some overlap when considered individually but, when combined, suggested a high potential for accurately classifying species. We also examined these features split by sex, revealing further distinctions in measurements that could enhance our model’s predictive accuracy. The combination of culmen length and depth, in particular, emerged as critical: distinguishing between Adelie and the combined group of Chinstrap/Gentoo by culmen length, and between Gentoo and the combined group of Adelie/Chinstrap by culmen depth. This structured approach not only facilitated a thorough understanding of the dataset but also ensured that our machine learning models were built on a solid foundation of clean and relevant data.</p>
+<p><strong>4. Feature Selection</strong><br>
+</p>
+<p>Informed by our EDA, we moved to feature selection, aiming to identify a compact set of features that could effectively predict penguin species. Given the patterns observed, we chose to focus on two quantitative features—culmen length and depth—and one qualitative feature—sex—as our primary predictors.</p>
+<p>To refine our selection and validate the effectiveness of these features, we devised a function named comb_score. This function systematically tested combinations of these features across our three chosen models: Multinomial Logistic Regression, Random Forests, and Support Vector Machines. Employing cross-validation as part of our strategy allowed us to mitigate overfitting and ensure robustness in our model’s performance. Cross-validation was particularly vital, as it provided a more generalized understanding of model accuracy across multiple subsets of the data, rather than relying solely on a single train-test split.</p>
+<p>This approach not only streamlined our feature set but also reinforced our model’s capacity to generalize well to new data, an essential aspect of successful machine learning applications. By the guidelines of the project, we were to select 2 quantitative variables and 1 qualitative variable. From the results of running this function, we found that the three most appropriate variables to include in the model were ‘Culmen Length’, ‘Culmen Depth’, and ‘Sex’.</p>
+<p><strong>5. Modeling</strong></p>
+<p>To analyze the data, we employed three distinct machine learning models using the Sci-kit Learn library: Multinomial Logistic Regression (MLR), Random Forest, and Support Vector Machines (SVM). Each model was evaluated for its effectiveness in classifying the species of penguins based on the selected features.</p>
+<ol type="1">
+<li><strong>Multinomial Logistic Regression (MLR):</strong> We began with the MLR model due to its robustness in handling multiclass classification problems. After training the model, we utilized a confusion matrix to assess its performance. The confusion matrix demonstrated perfect classification accuracy on the test set, with a cross-validation score of 0.988. Furthermore, we plotted decision regions to visualize the classification boundaries created by the model. These plots revealed that most data points were correctly classified, with only a few outliers, emphasizing the model’s overall high accuracy and reliability.</li>
+<li><strong>Random Forest:</strong> Our next model was the Random Forest classifier. After training, similar evaluations were conducted. The confusion matrix indicated that the Random Forest model successfully predicted the species of 63 out of 64 penguins in the test set, only misclassifying a single Gentoo penguin as a Chinstrap. The cross-validation score for this model was 0.981. Decision region plots were again used to visualize the model’s performance, showing a high degree of accuracy, with minimal misclassification except for the noted outlier.</li>
+<li><strong>Support Vector Machines (SVM):</strong> Finally, we trained the SVM model. This model yielded a cross-validation score of 0.827, significantly lower than the other two models. The confusion matrix revealed several misclassifications, particularly misidentifying 7 Gentoo penguins as Chinstrap. This issue was further explored through decision region plots, which highlighted a large overlap in the prediction regions, especially where the SVM used culmen depth as a key feature. It became evident that the model struggled with overlap in feature distributions, particularly for Gentoo penguins with culmen depths less than approximately 18-19 mm, leading to these misclassifications. Each model’s decision regions provided critical insights into how effectively each algorithm could delineate between species based on the given features. This comparison highlighted strengths and weaknesses in how each model handled the complexity of the dataset, guiding our ultimate choice of the best performing model for the final application.</li>
+</ol>
+<p><strong>Results</strong></p>
+<ol type="1">
+<li><p><strong>Multinomial Logistic Regression (MLR)</strong> The Multinomial Logistic Regression model achieved a cross-validation score of 0.988, indicating high accuracy in predicting penguin species based on culmen length, culmen depth, and sex. The confusion matrix confirmed that the model correctly classified all penguins in the test dataset. Despite a few points misclassified as outliers, the decision regions plot demonstrated that the model performs robustly across the dataset. This suggests that the MLR model is not overfitting, as it maintains consistent performance across training, cross-validation, and testing datasets, indicating good generalization to new data. Possible improvements could include expanding the dataset and incorporating more predictive features to enhance the model’s accuracy further.</p></li>
+<li><p><strong>Random Forest</strong> The Random Forest model reported a cross-validation score of 0.981, showcasing its effectiveness in species classification using the same features as MLR. It misclassified only one penguin in the test set, suggesting it is almost as accurate as the MLR model. The decision regions plot indicated no signs of overfitting, with stable performance across different data splits. This model’s generalizability could potentially be improved through hyperparameter tuning, such as GridSearch or Bayesian optimization, to optimize performance.</p></li>
+<li><p><strong>Support Vector Machines (SVM)</strong> The Support Vector Machines model lagged behind the other two, with a cross-validation score of 0.827. It incorrectly predicted the species of 7 out of 64 penguins in the test set, primarily confusing Gentoo penguins as Chinstrap. This issue was visible in the decision regions plot, where the model showed significant overlap in species classification. Despite its lower performance, the SVM model did not exhibit signs of overfitting and performed consistently across the training and testing datasets. Improvement could be achieved by expanding the number of qualitative variables used for prediction, which preliminary tests suggested might enhance accuracy.</p></li>
+</ol>
+<p>Overall Performance and Recommendations:<br>
+The MLR and Random Forest models both achieved near-perfect prediction accuracy on the test data, making either model a strong candidate for practical applications. However, given its slightly higher cross-validation score and simpler structure, the MLR model is recommended as the primary choice. Its simplicity suggests better generalizability and lower computational overhead compared to the more complex Random Forest model.</p>
+<p>In conclusion, while all three models performed commendably, the Multinomial Logistic Regression model, using culmen length, culmen depth, and sex as predictors, is selected as the optimal model for classifying penguin species due to its high accuracy and model simplicity.</p>
+<p><strong>Challenges</strong></p>
+<p>Throughout the project, we faced several challenges that tested our problem-solving and analytical skills. One of the primary challenges was working with these models in python, as they were all brand new to us as students. We conducted a lot of research and consulted the documentation from sci-kit learn heavily. Another challenge was determining the best methods for feature selection and model evaluation, especially in balancing model accuracy with the risk of overfitting. To tackle this, we were able to plot the decision regions of the model, which also gave us a lot of helpful insight into how the models were making their classifications, and where the cutoff for the features was. These challenges necessitated a thorough exploration of various statistical techniques and collaborative problem-solving to ensure the integrity and reliability of our findings.</p>
+<p><strong>Teamwork</strong></p>
+<p>The success of this project was largely due to effective teamwork and collaborative effort. All team members were actively involved in every phase of the project, from data acquisition and preparation to model evaluation and final discussions. In the initial stages, we jointly worked on cleaning the data, which involved rigorous discussions on handling missing values and deciding which features to modify or remove. During the data visualization phase, each of us contributed by coding at least one plot or table, ensuring diverse input in the discussion and interpretation of results.</p>
+<p>Feature selection was a collective effort where we debated various approaches and jointly developed the cross-validation scoring function, primarily coded by Chen and Lucas. Model fitting and analysis were also collaborative, with Ethan (myself) taking the lead on coding the decision regions plots. We collectively analyzed the outputs, including confusion matrices and the implications of misclassifications by each model. Our final decision on the model selection was made unanimously, reflecting our cohesive approach to research and problem-solving.</p>
+<p><strong>Conclusion</strong></p>
+<p>This project not only enhanced our technical skills in data science and machine learning but also strengthened our ability to work as a team. Throughout the project, we successfully navigated challenges through mutual support and shared knowledge, which was crucial in achieving our objectives. The experience has prepared us well for future collaborative projects and professional challenges in the field of data science. Read my full report of the project <a href="../../Projects/Classifying Penguins/Final_Project-3.pdf" title="pdf">here</a>. And just for fun for reading this far, here is a <a href="https://youtu.be/o5QZz6KksvE?si=5YKH4VobQRGLwkrO" target="_blank">super cute video</a> of Gentoo Penguins building nests.</p>
 
 
 
