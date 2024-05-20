@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Bree Chen, Tony Lei, Alyssa Liu, Ethan Warren">
+<meta name="dcterms.date" content="2024-03-13">
+<meta name="description" content="Training an AI to play and beat Super Mario Bros with unsupervised deep reinforcement learning.">
+
+<title>Super Mario Reinforcement Learning</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+<meta name="citation_title" content="Super Mario Reinforcement Learning">
+<meta name="citation_author" content="Bree Chen, Tony Lei, Alyssa Liu, Ethan Warren">
+<meta name="citation_publication_date" content="2024-03-13">
+<meta name="citation_cover_date" content="2024-03-13">
+<meta name="citation_year" content="2024">
+<meta name="citation_online_date" content="2024-03-13">
+<meta name="citation_language" content="en">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects/index.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-bi-github" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-bi-github">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/ethanmwarren/personal-website">
+ <span class="dropdown-text">Website Source Code</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/ethanmwarren">
+ <span class="dropdown-text">Github Profile</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#project-overview" id="toc-project-overview" class="nav-link" data-scroll-target="#project-overview">Project Overview</a></li>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections">Reflections</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Super Mario Reinforcement Learning</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">machine learning</div>
+    <div class="quarto-category">neural network</div>
+    <div class="quarto-category">deep reinforcement learning</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Training an AI to play and beat Super Mario Bros with unsupervised deep reinforcement learning.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Bree Chen, Tony Lei, Alyssa Liu, Ethan Warren </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 13, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maxresdefault.jpg" class="img-fluid figure-img"></p>
+<figcaption>Original Super Mario Bros.</figcaption>
+</figure>
+</div>
+<section id="introduction" class="level3">
+<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
+<p>Super Mario Bros is legendary. Despite not playing it myself in my childhood, I grew up on it’s legacy. I had decided I was going to tackle a project with AI, wanting to challenge myself to learn about deep learning by doing it, but when deciding on a specific challenge, I wanted something to represent how this challenge with AI made me feel. Super Mario Bros.&nbsp;is that challenge. It feels monumental, unwavering and bold in status, despite being so simple, as if it, as a game, knew what it’s legacy would be.</p>
+<p>It felt fitting, dare I say poetic, to choose this classic game with such a powerful status: it’s straightforward, yes, but conquering it with AI still presents a significant challenge, and, much like this game became larger than itself in a mega-universe of games and lore, this project feels like the beginning of my journey to learn and understand AI. You’ll see that I was not able to fully achieve what I wanted, but think of this project as a starting point and a symbol of all the bigger things to come, the first footsteps taken in search of a flagpole out in the infinite distance.</p>
+</section>
+<section id="project-overview" class="level3">
+<h3 class="anchored" data-anchor-id="project-overview">Project Overview</h3>
+<section id="unsupervised-learning" class="level4">
+<h4 class="anchored" data-anchor-id="unsupervised-learning">Unsupervised Learning</h4>
+<p>The framework we used for out AI is called <strong>unsupervised learning.</strong> It is a machine learning approach where the AI learns to achieve a task without a human-defined <em>“optimal”</em> solution or stragey. It is different from <strong>supervised learning</strong>, where we as the human trainer want the AI to learn to mimic some human behavior, like identifying handwritten digits or something. In supervised learning, the AI knows what the right answer is. It might have guessed that that weird looking squiggle was a 2, but it knows after its prediction that it was actually a 5.</p>
+<p>Both supervised and unsupervised learning are useful for different tasks, but unsupervised learning is much more open-ended in nature, and in some ways more exciting. Without being chained to learn a strategy that humans might think is optimal, it’s free to explore the game and come up with its own idea of optimal strategy.</p>
+<p>My favorite example of this comes from the game of Go and the AI that learned to master it, AlphaGo. Go is an ancient game, originating in east-asia. Wildly more complex than chess, humans have spent the last 2000 years developing what they thought was an “optimal strategy.” Enter AlphaGo, an unsupervised AI that taught itself to play Go, that learned completely unconventional, seemingly illogical strategy. It famously defeated the world’s best Go player, Lee Sedol, 4-1 in a highly publicized 5-game tournament. For anyone who hasn’t seen the documentary, I highly recommend it, of the same name: <em>AlphaGo</em>. But you should definitley finish reading this first.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="alpha-go.png" class="img-fluid figure-img"></p>
+<figcaption>AlphaGO AI vs.&nbsp;Lee Sedol in highly publicized tournament.</figcaption>
+</figure>
+</div>
+</section>
+<section id="project-goals" class="level4">
+<h4 class="anchored" data-anchor-id="project-goals">Project Goals</h4>
+<p>Anyways, I am fascinated by that story and to me it represents the enormous potential of AI, of which I believe we are just dipping into the surface of right now. I wanted an AI that might teach me something, if it learns a better strategy for playing Super Mario Bros.&nbsp;With that, we set out two goals for this project:</p>
+<ol type="1">
+<li>Train an AI to beat the first level of Super Mario Bros.&nbsp;better than me (SuperHuman).</li>
+<li>Train this AI in such a way that it is able to develop a general strategy—i.e.&nbsp;if you were to drop it in a new unseen level, it would be able to beat it.</li>
+</ol>
+</section>
+</section>
+<section id="methodology" class="level3">
+<h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
+<section id="mathematical-theory-of-reinforcement-learning" class="level4">
+<h4 class="anchored" data-anchor-id="mathematical-theory-of-reinforcement-learning">Mathematical Theory of Reinforcement Learning</h4>
+<p>Before diving into the implementation of our AI, our team dedicated significant time to understand the mathematical foundations of reinforcement learning algorithms. This foundational knowledge was crucial to understanding how to implement our model in code.</p>
+<p>At its core, reinforcement learning involves an agent that learns to make sequential decisions by interacting with an environment. The agent is in a constant cycle of performing an action, receiving rewards or penalties from that action, then picking a new action and repeating. Over time the AI learns to take actions that maximize its rewards. The key concepts include:</p>
+<ol type="1">
+<li><strong>Agent</strong>: The learner or decision-maker, the AI ‘Player’ in this context.</li>
+<li><strong>Environment</strong>: Everything external the agent interacts with, in this case the stage or level.</li>
+<li><strong>State (<span class="math inline">\(s\)</span>)</strong>: A representation of the current situation of the agent, i.e.&nbsp;his place in the enviroment.</li>
+<li><strong>Action (<span class="math inline">\(a\)</span>)</strong>: A choice the agent can make.</li>
+<li><strong>Reward (<span class="math inline">\(r\)</span>)</strong>: Feedback from the environment based on the action the agent has taken.</li>
+<li><strong>Policy (<span class="math inline">\(\pi\)</span>)</strong>: A strategy that the agent employs to determine what actions to take based on states.</li>
+<li><strong>Value Function (<span class="math inline">\(V(s)\)</span>)</strong>: The expected cumulative reward for being in state <span class="math inline">\(s\)</span> and following a policy <span class="math inline">\(\pi\)</span>.</li>
+<li><strong>Q-Value Function (<span class="math inline">\(Q(s, a)\)</span>)</strong>: The expected cumulative reward for taking action <span class="math inline">\(a\)</span> in state <span class="math inline">\(s\)</span> and following a policy <span class="math inline">\(\pi\)</span>.</li>
+</ol>
+<p>So what we call learning for the AI is actually the agent finding a policy that maximizes its total expected reward, often referred to as the return. Here, the agent is guided by the Q-value function that it learns, which, very broadly, it uses to predict how much reward it expects to receive from taking actions in some state. It then chooses to take the action with the highest predicted reward, and that becomes it’s policy.</p>
+<p>The fundamental algorithm here is Q-Learning, where the agent learns to approximate the true Q-value function iteratively using the Bellman equation:</p>
+<p><span class="math display">\[ Q(s, a) \leftarrow Q(s, a) + \alpha \left( r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right) \]</span></p>
+<p>Where <span class="math inline">\(\alpha\)</span> is the learning rate, <span class="math inline">\(\gamma\)</span> is the discount factor, and <span class="math inline">\(s'\)</span> and <span class="math inline">\(a’\)</span> are the next state and action, respectively. This algorithm uses future rewards and some hyperparameters that we can tune to make updates to the Q-value function that make it better at predicting rewards.</p>
+<p>The details of this function really aren’t important. The key takeaway is that we have a way to update our Q-value function to get better and better at predicting rewards for our agent, allowing it to make better choices about what action to take to get it closer to the flagpole.</p>
+<p>A small caveat I will make right here is that we actually want to use a slightly more complicated equation since our model uses a neural network to approximate the Q-value function. The math here is extremely complicated and beyond me, but people smarter than me have shown that it is better to use this equation:</p>
+<p><span class="math display">\[ Q(s, a) \leftarrow Q(s, a) + \alpha \left( r + \gamma Q_{\text{target}}(s', \arg\max_{a'} Q_{\text{online}}(s', a')) - Q_{\text{online}}(s, a) \right) \]</span></p>
+<p>This approach mathematically stabilizes training by using a separate neural network to predict future rewards (called the target network) from the one that chooses actions for mario (the online network). This separation helps improve the accuracy and reliability of our AI agent’s learning process.</p>
+</section>
+<section id="implementation-framework" class="level4">
+<h4 class="anchored" data-anchor-id="implementation-framework">Implementation Framework</h4>
+<p>The implementation of this project in code follows this extremely helpful and detailed tutorial on youtube, from Sourish Kundu. This video was amazing, going over the theoretical math that I talked about above, and showing how to actually implement that theoretical framework in code.</p>
+<p>The implementation involved setting up the environment with <a href="https://openai.com/index/openai-gym-beta/">OpenAI’s Gym</a>, designing the neural network architecture, and developing the training loop to iteratively update the Q-values and improve the agent’s performance. We made sure to adapt and expand upon the concepts introduced in the video to tailor the project to our specific goals and requirements.</p>
+</section>
+<section id="architecture" class="level4">
+<h4 class="anchored" data-anchor-id="architecture">Architecture</h4>
+<p>Our AI training framework for Super Mario Bros follows a structured and modular approach, integrating several key components necessary for the training process. The architecture includes the neural network, the agent-environment interaction, and various simplifications to streamline the learning process. Here’s an overview of the framework and key components:</p>
+<p><strong>Neural Network</strong></p>
+<p>The core of our implementation is the neural network that processes game frames and predicts the Q-values for possible actions. We used a Convolutional Neural Network (CNN) due to its effectiveness in extracting spatial features from images, crucial for understanding the game environment.</p>
+<p>Convolutional Layers: These layers process input frames to detect features like edges, textures, and objects. By applying what are called convolutional filters, the network learns to recognize patterns such as enemies, obstacles, and movements within the game. Fully Connected Layers: After the convolutional layers, fully connected layers combine the extracted features and predict the Q-value rewards for each possible action. The final output layer provides the Q-values for the agent’s action choices, allowing the agent to select the action with the highest predicted rewards.</p>
+<p><strong>Training Algorithm</strong></p>
+<ul>
+<li><strong>Agent</strong>: The agent interacts with the game environment, making decisions based on the state of the game and updating its knowledge through the training algorithm.</li>
+<li><strong>Epsilon-Greedy Policy</strong>: To balance exploration and exploitation, we used an epsilon-greedy approach. Initially, the agent is heavily biased to explore the environment by taking random actions (high epsilon), which will lead mario to try many new strategies at the beginning of training. As training progresses, epsilon decreases, and the agent increasingly exploits the policy it has learned up to this point by choosing actions with the highest predicted Q-values.</li>
+<li><strong>Replay Buffer</strong>: The agent stores its experiences (state, action, reward, next state) in a replay buffer. This allows the network to learn from past experiences and break the correlation between consecutive states, leading to more stable training.</li>
+<li><strong>Double Q-Learning</strong>: In the DDQN algorithm, we maintain two neural networks – the online network for selecting actions and the target network for evaluating them. Periodically updating the target network with the weights of the online network reduces overestimation and stabilizes learning.</li>
+</ul>
+<p><strong>Simplification Choices</strong></p>
+<p>To make the training process feasible and efficient, we incorporated several simplification choices:</p>
+<ul>
+<li><strong>Preprocess Frames</strong>: We preprocess the game frames using wrappers to reduce computational complexity and simplify training. A <code>SkipFrame</code> wrapper reduces the frequency of updates by repeating the same action for a fixed number of frames. Frames are converted to grayscale to reduce the amount of data the network must process. They are resized to a smaller, standardized size (84x84 pixels) to decrease computational load. And finally, consecutive frames are stacked to provide temporal context, which helps the agent understand movement and changes in the environment.</li>
+<li><strong>Limited Action Space</strong>: We restricted the agent’s action space to a simplified set of actions (e.g., moving right, jumping) to focus on the essential movements needed to navigate the level. This reduces the complexity of the decision-making process and speeds up learning, though it does limit flexibility of the model as Mario is only allowed to perform movements that move him towards the flagpole.</li>
+<li><strong>Reward Structure</strong>: The reward system incentivizes the agent to progress through the level by awarding positive rewards for moving right and penalizing it for standing still or dying. This straightforward reward structure guides the agent towards the main goal of completing the level.</li>
+</ul>
+<p>By combining these components and simplification choices, our implementation effectively trains an AI agent to play and beat the first level of Super Mario Bros.&nbsp;The modular design allows for easy adjustments and extensions, making the framework versatile for various reinforcement learning tasks.</p>
+<hr>
+</section>
+</section>
+<section id="results" class="level3">
+<h3 class="anchored" data-anchor-id="results">Results</h3>
+<p>The training process was very slow, due to the nature of unsupervised learning. Our AI agent faced a lot of challenges in training, initially making random decisions, and slowly but surely through training, finding a policy that worked. Initially, the model was very stupid. A big hurdle that we didn’t see coming were that the tall pipes were actually a big issue to jump over. These pipes require Mario to hold down the jump button for the maximum amount of time. With purely random button presses at the beginning of training, the chance of him holding jump for this long was evidently pretty unlikely. This would be no problem for a human player who can make the connection that the tall pipe requires a tall jump to get over it, but alas, the baby AI was not as capable.</p>
+<center>
+<video width="384" height="360" controls="">
+<source src="mario_initial.mov" type="video/mp4">
+</video>
+</center>
+<p>But, through training, the AI was learning a strategy, and eventually, after almost 100 hours of training and 50,000 iterations, our AI agent was successfully beating the first level of Mario.</p>
+<center>
+<video width="384" height="360" controls="">
+<source src="game.mov" type="video/mp4">
+</video>
+</center>
+<p>So, he’s still getting stuck on the pipe. But at least he is beating the level! So he’s not perfect. But there’s still a whole lot of improvement from that top video, so he is learning. He’s not perfect but I love him.</p>
+<hr>
+</section>
+<section id="reflections" class="level3">
+<h3 class="anchored" data-anchor-id="reflections">Reflections</h3>
+<p>This project was a pretty big undertaking for us. We faced several significant challenges throughout this project, which also provided valuable learning experiences. Our initial lack of experience with coding a reinforcement learning algorithm posed a steep learning curve. Additionally, training for this model was extremely computationally intensive, and we are all students who need to use our laptops for school, so there wasn’t as much training for the model as there could have been.</p>
+<p>Looking back at our goals, we weren’t able to achieve everything we set out to. But, we were able to get Mario to successfully beat the first level! So that is definitely something, and honestly with how hard this project proved to be, I’m very happy with that.</p>
+<p>This project significantly enhanced my skills in coding, reinforcement learning, and neural network architectures. I can say that I know so much more about deep reinforcement learning, coding neural networks, and working with APIs to interact with other interfaces.</p>
+<section id="improvements-to-the-model" class="level4">
+<h4 class="anchored" data-anchor-id="improvements-to-the-model">Improvements to the Model</h4>
+<p>Training this model for longer would have a huge benefit, as it would allow Mario to become even better at understanding his environment and making decisions for actions to take. Right now, he is still seemingly doing erratic, random movements.</p>
+<p>Additionally, the full move set would give Mario more flexibility in the choices he was making, though, it would take much more training time.</p>
+<hr>
+</section>
+</section>
+<section id="conclusion" class="level3">
+<h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
+<p>In this project, we successfully trained an AI agent to play and beat the first level of Super Mario Bros using a Double Deep Q-Network (DDQN) algorithm. This achievement showcases the power and potential of reinforcement learning, demonstrating how an agent can learn complex tasks through interaction with its environment and iterative improvement.</p>
+<section id="summary" class="level4">
+<h4 class="anchored" data-anchor-id="summary">Summary</h4>
+<ol type="1">
+<li><strong>Introduction to Reinforcement Learning</strong>: We began by grounding ourselves in the mathematical foundations of reinforcement learning, understanding key concepts like the Q-value function, Bellman equation, and the differences between supervised, unsupervised, and reinforcement learning.</li>
+<li><strong>Implementation Framework</strong>: Our implementation was structured around a robust neural network architecture, leveraging convolutional layers to process game frames and fully connected layers to predict Q-values. The agent utilized an epsilon-greedy policy to balance exploration and exploitation, with experiences stored in a replay buffer to stabilize training.</li>
+<li><strong>Challenges and Solutions</strong>: We navigated several challenges, including our initial lack of experience with coding advanced reinforcement learning algorithms, long training times, and diagnosing bugged code. Systematic debugging, incremental progress, and efficient use of computational resources were key to overcoming these hurdles.</li>
+<li><strong>Skills Developed</strong>: This project significantly enhanced our coding proficiency, deepened our understanding of unsupervised machine learning, and provided practical experience in designing and optimizing neural network architectures.</li>
+<li><strong>Training Process and Results</strong>: The agent’s performance improved over successive episodes, with increasing total rewards indicating effective learning. The final model, as showcased in the embedded video, successfully navigates the game level and reaches the goal, demonstrating the effectiveness of our approach.</li>
+</ol>
+</section>
+<section id="recommendations-for-improvement" class="level4">
+<h4 class="anchored" data-anchor-id="recommendations-for-improvement">Recommendations for Improvement</h4>
+<p>Given more time and resources, there are several ways to enhance this project further:</p>
+<ol type="1">
+<li><strong>Extended Training Time</strong>: Increasing the training duration and utilizing more powerful computational resources could further improve the agent’s performance and stability. Access to high-performance GPUs or cloud-based computing platforms would be beneficial.</li>
+<li><strong>Algorithm Optimization</strong>: Exploring and implementing more advanced reinforcement learning algorithms, such as Proximal Policy Optimization (PPO) or Asynchronous Advantage Actor-Critic (A3C), could lead to better performance and more efficient learning.</li>
+<li><strong>Hyperparameter Tuning</strong>: Conducting a thorough hyperparameter tuning process using techniques like grid search or Bayesian optimization could optimize the training process and improve the agent’s learning rate, discount factor, and exploration strategy.</li>
+<li><strong>Environment Complexity</strong>: Expanding the complexity of the game environment by including additional levels or more dynamic elements could provide a more rigorous test of the agent’s capabilities and adaptability.</li>
+<li><strong>Model Enhancements</strong>: Incorporating techniques like transfer learning, where the agent is pre-trained on simpler tasks before tackling the main game, could accelerate learning and improve performance. Additionally, using more sophisticated neural network architectures, such as deeper convolutional networks or recurrent neural networks, could enhance the agent’s ability to process and understand the game environment.</li>
+</ol>
+<p>This project has been a valuable journey into the world of reinforcement learning, providing practical insights and demonstrating the potential of AI in solving complex tasks. With further improvements and optimizations, there is immense potential to push the boundaries of what our AI agent can achieve.</p>
+<p>Thank you for following along with this journey. And thank you again to Sourish Kundu for his excellent video on training an unsupervised deep learning Mario AI. The link to the github for this project is <a href="https://github.com/the-data-science-union/DSU-W2024-Reinforcement-Learning">here</a>.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>© 2024, Ethan Warren</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

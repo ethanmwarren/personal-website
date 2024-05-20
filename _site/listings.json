@@ -2,7 +2,8 @@
   {
     "listing": "/projects/index.html",
     "items": [
-      "/projects/Classifying penguins/index.html"
+      "/projects/Super_mario_RL/index.html",
+      "/projects/Classifying_penguins/index.html"
     ]
   }
 ]
