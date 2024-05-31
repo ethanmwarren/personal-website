@@ -1,0 +1,181 @@
+---
+categories:
+- sentiment analysis
+- linguistics
+- topic modelling
+date: 2024-3-22
+description: "Analysis of public stigma in response to athletes' mental health through tweets about Simone Biles during the 2020 Olympics."
+author: Elena Bateman, Priyanka Iragavarapu, Rebekah Limb, 
+        Alyssa Lung, Misha Reiss, Ethan Warren
+google-scholar: true
+image: simone-biles.jpg
+title: Mental Gymnastics
+comments: false
+---
+
+![Simone Biles completing a beam routine at the Tokyo 2020 Olympics, days before dropping out due to mental health concerns.](simone-biles.jpg)
+
+## Introduction
+
+In recent years, the intersection of mental health and athletic performance has garnered significant attention, particularly within the context of high-profile athletes. Recent discussions are challenging existing stigmas and promoting a new culture of openness and support. This study focuses on analyzing public sentiment towards the mental health of athletes by examining tweets posted about Simone Biles after [dropping out of the Olympic competition in Tokyo](https://www.nytimes.com/2021/07/28/sports/olympics/simone-biles-out.html), following mental health concerns.
+
+Simone Biles' public discourse provides a rich playground for exploring societal attitudes towards mental health in the sports domain, using twitter as proxy for public response. Utilizing natural language processing techniques (NLP), this report examines the nuances of public opinion, shedding light on prevalent themes and sentiments expressed on social media. Understanding these perspectives is crucial for addressing stigma and promoting mental health awareness among athletes. This study aims to contribute to the broader conversation on mental health in sports, offering insights into the public's response to athletes' mental health challenges. Click [here](www.example.com) to find the gihub for the project where all the code and documentation can be found, and click [here](netlify.ethanwarren.app/projects/Sentiment_tweets#Results) to skip over the methodology and go straight to the results.
+
+#### Project Overview
+
+The primary objective is to understand how public discourse, as seen in Twitter social media, frames mental health issues within the realm of professional international sports. We use sentiment analysis to capture the attitude of the public's reaction. We then use topic modelling to identify common themes present in the tweets, and finally word vectorization to map topics to words and emotions.
+
+## Methodology
+
+### Data Collection
+
+The dataset was compiled from public tweets using the Twitter API, isolating tweets mentioning gymnastics during the 2020 Summer Olympics. The collection period spanned from July 15 to August 14, 2021, capturing the timeline of Simone Biles's participation and subsequent withdrawal. The dataset contains around 16.5K tweets. The features present in this dataset include: the textual content of each tweet, any entities present (hashtags, mentions, urls, etc.), the time posted, and the unique twitter ID of both the author and the tweet. 
+
+Notably, any information related to engagement metrics, i.e. likes, comments, replies, and retweets, is not part of the dataset. This required us to direct our analytical focus towards natural language processing due to the data’s qualitative nature.
+
+**The cleaned data consisted of the following fields:**
+
+<table style="border: 1px solid black; width: 70%; margin-left: 40px; text-align: left; border-collapse: collapse;">
+  <tr>
+    <th style="border: 1px solid black; padding: 4px;">Variable</th>
+    <th style="border: 1px solid black; padding: 4px;">Description</th>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 4px;">Text</td>
+    <td style="border: 1px solid black; padding: 4px;">Content of the tweet</td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 4px;">Entities</td>
+    <td style="border: 1px solid black; padding: 4px;">Various entities mentioned in the tweet, such as hashtags and annotations</td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 4px;">Time</td>
+    <td style="border: 1px solid black; padding: 4px;">The time the tweet was posted</td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 4px;">Other</td>
+    <td style="border: 1px solid black; padding: 4px;">Other information, e.g. unique tweet ID, author ID, and edit history were not utilized in this analysis</td>
+  </tr>
+</table>
+
+
+### Exploratory Data Analysis
+
+We began our analysis by exploring the dataset to understand the dataset on a broad level before diving into an analysis. We began by creating a word cloud of the tweet textual data. 
+
+<figure style="text-align: center;">
+  <img src="wordcloud.png" alt="Word Cloud" width="500">
+  <figcaption>Fig 1. Word Cloud</figcaption>
+</figure>
+
+Olympics, gymnastics, and Simone Biles are all central to this word cloud, indicating a high volume of tweets that contained these words. Other recurrent terms such as "tokyo2020," "team," "gold," and "sport" further characterize the dataset’s focus around gymnastics and the Olympic Competition.
+
+We then looked at the number of tweets per hour and how they evolved over time after Simone Biles made the announcement to drop out of the Olympics. The team used an eight-hour rolling mean to smooth out the curve over a longer time period while still retaining the shape of the data. 
+
+<figure style="margin-right: 30px; text-align: center;">
+  <img src="tweetvolume.png" alt="Graph showing the number of tweets over time, with a spike when Biles announces her drop out." width="600">
+  <figcaption>Fig 2. Tweet volume per 8 hours.</figcaption>
+</figure>
+
+We see a clear spike right after her announcement, indicating a public response on the day she decided to drop out; however, we also see the number of tweets decrease relatively quickly after August 27, returning to what seems to be normal olympic tweet volume after about a week, and then to low tweet activity after just 2 weeks. This suggests there was not a sustained public reaction.
+
+Finally, we looked at the top 10 most common hashtags present.
+
+<figure style="margin-right: 30px; text-align: center;">
+  <img src="hashtags.png" alt="Bar chart showing top 10 hashtags." width="700">
+  <figcaption>Fig 3. Bar Chart of Hashtags.</figcaption>
+</figure>
+
+We can see again an strong focus on gymnastics, with the olympics, and Simone Biles also being important hashtags. We see the first mention of mental health in the 9th most common hashtag, indicating that it is a relevant topic to this dataset, but appears not to be the primary focus of the tweets. With a better understanding of the content of the data, we move on to natural language processing.
+
+### Natural Language Processing
+
+#### Preprocessing
+
+To prepare for NLP, we further preprocessed the tweet data to standardize it, focusing on the pure textual content. We followed preprocessing protocol by first removing all punctuation and special characters, as well as any stop words like "the" and "and" which don't carry meaningful information. Tweets were then lemmatized, breaking down words to their root form (e.g. 'flipping' $\rightarrow$ 'flip'), which typically improves NLP results. We did our best to remove junk tweets, and decided to remove all links and url patterns from the text as well, to focus on the textual content of each tweet.
+
+#### Sentiment Analysis
+
+For sentiment analysis, we employed the Valence Aware Dictionary and sEntiment Reasoner (VADER) tool, which is well-suited for social media text due to its consideration of contextual polarity and intensity. VADER assigns each tweet a sentiment score based on a predefined lexicon. The sentiment score ranges from -1 to 1, where:
+
+- **Negative sentiment**: Scores closer to -1 indicate negative sentiment.
+- **Neutral sentiment**: Scores around 0 indicate neutral sentiment.
+- **Positive sentiment**: Scores closer to 1 indicate positive sentiment.
+
+Each tweet in the dataset was processed through the VADER tool to generate sentiment scores. The distribution of sentiment scores across the dataset was analyzed to identify overall trends and patterns. This analysis included calculating the proportion of positive, negative, and neutral tweets. The sentiment analysis results set the foundation for further investigation into the public's perception of athletes' mental health and provided a contextual basis for the subsequent topic modeling.
+
+#### Non-negative Matrix Factorization
+
+To further understand the themes and discussions within tweets about Simone Biles, we employed topic modeling, a technique designed to discover abstract topics within a collection of documents. This study utilized Non-Negative Matrix Factorization (NMF), a method that is particularly effective for high-dimensional text data, providing clearer and more interpretable topics. 
+
+While many topic modelling techniques were initially tested, like Latent Semantic Analysis (LSA) and Latent Dirichlet Allocation (LDA), NMF was chosen for its robustness in handling large text datasets and its ability to produce easily interpretable topics. NMF works by factorizing the term-document matrix into two lower-dimensional matrices: a term-topic matrix and a topic-document matrix. Each document (tweet) is represented as a mixture of topics, and each topic is represented as a mixture of terms.
+
+**Implementation:**
+
+- **Library**: The NMF model was implemented using Python's Scikit-learn library.
+- **Parameter Selection**: The number of topics was determined by evaluating the coherence scores and conducting manual inspections to ensure meaningful and distinct topics.
+- **Process**: The preprocessed tweet data was vectorized using Term Frequency-Inverse Document Frequency (TF-IDF) to create the term-document matrix. This matrix was then decomposed using NMF.
+
+The resulting topics were analyzed and labeled based on the most representative terms and example tweets for each topic. Each topic was defined by a set of high-weighted words, providing insights into the key themes discussed in relation to Simone Biles' mental health.
+
+## Results
+
+This allowed us to produce a histogram of sentiment scores for all tweets in the dataset.
+
+<figure style="margin-right: 30px; text-align: center;">
+  <img src="Sentiment.png" alt="Histogram showing distribution of tweets' sentiment scores." width="700">
+  <figcaption>Fig 4. Histogram distribution of sentiment scores for tweets.</figcaption>
+</figure>
+
+Interestingly, this 
+
+.
+
+.
+.
+
+.
+
+.
+
+
+.
+
+.
+.
+
+.
+
+.
+
+
+.
+
+.
+
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+
+
+To prepare the data for analysis we first extracted the entities from each tweet to store them individually to make analysis easier. Many features of the dataset were not utilized in this analysis - for example, columns relating to
+unique tweet and author ID numbers, IDs of referenced tweets, information about any withheld content, and the edit history of tweets.
+
+
+Utilizing TextBlob, a python sentiment library, we were able to assign a sentiment score to each tweet, acting as an estimate of the overall positive or negative attitude. This is achieved with a word lexicon that assigns a score to most english words, and those scores are averaged to give an estimate of the overall sentiment of a tweet. With this we were able to give every tweet a sentiment score and analyze the changes and patterns in sentiments over time and within different groups.
+
+NMF:
+**Understanding the Output:**
+- **Top Words**: The top words for each topic were examined to understand the main themes.
+- **Example Tweets**: Representative tweets were reviewed to provide context and validate the relevance of the topics.
+- **Topic Distribution**: The prevalence of each topic across the dataset was analyzed to identify dominant themes and trends over time.

@@ -4,7 +4,7 @@ categories:
 - neural network
 - deep reinforcement learning
 date: 2024-3-13
-description: "Training an AI to play and beat Super Mario Bros with unsupervised deep reinforcement learning."
+description: "Training an AI to play and beat Super Mario Bros. with unsupervised deep reinforcement learning."
 author: Bree Chen, Tony Lei, Alyssa Liu, Ethan Warren
 google-scholar: true
 image: maxresdefault.jpg
