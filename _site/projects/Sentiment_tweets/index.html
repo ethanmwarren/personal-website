@@ -173,6 +173,7 @@ window.Quarto = {
   <li><a href="#natural-language-processing" id="toc-natural-language-processing" class="nav-link" data-scroll-target="#natural-language-processing">Natural Language Processing</a></li>
   </ul></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
   </ul>
 </nav>
     </div>
@@ -228,8 +229,8 @@ window.Quarto = {
 </div>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>In recent years, the intersection of mental health and athletic performance has garnered significant attention, particularly within the context of high-profile athletes. Recent discussions are challenging existing stigmas and promoting a new culture of openness and support. This study focuses on analyzing public sentiment towards the mental health of athletes by examining tweets posted about Simone Biles after <a href="https://www.nytimes.com/2021/07/28/sports/olympics/simone-biles-out.html">dropping out of the Olympic competition in Tokyo</a>, following mental health concerns.</p>
-<p>Simone Biles’ public discourse provides a rich playground for exploring societal attitudes towards mental health in the sports domain, using twitter as proxy for public response. Utilizing natural language processing techniques (NLP), this report examines the nuances of public opinion, shedding light on prevalent themes and sentiments expressed on social media. Understanding these perspectives is crucial for addressing stigma and promoting mental health awareness among athletes. This study aims to contribute to the broader conversation on mental health in sports, offering insights into the public’s response to athletes’ mental health challenges. Click <a href="www.example.com">here</a> to find the gihub for the project where all the code and documentation can be found, and click <a href="netlify.ethanwarren.app/projects/Sentiment_tweets#Results">here</a> to skip over the methodology and go straight to the results.</p>
+<p>In recent years, the intersection of mental health and athletic performance has garnered significant attention, particularly within the context of high-profile athletes. Recent discussions are challenging existing stigmas and promoting a new culture of openness and support. This study focuses on analyzing public sentiment towards the mental health of athletes by examining tweets posted about Simone Biles after <a href="https://www.nytimes.com/2021/07/28/sports/olympics/simone-biles-out.html">dropping out of the Olympic Competition in Tokyo</a>, following mental health concerns.</p>
+<p>Simone Biles’ public discourse provides a rich playground for exploring societal attitudes towards mental health in the sports domain, using twitter as proxy for public response. Utilizing natural language processing techniques (NLP), this report examines the nuances of public opinion, shedding light on prevalent themes and sentiments expressed on social media. Understanding these perspectives is crucial for addressing stigma and promoting mental health awareness among athletes. This study aims to contribute to the broader conversation on mental health in sports, offering insights into the public’s response to athletes’ mental health challenges. Click <a href="https://github.com/ethanmwarren/Mental-Gymnastics">here</a> to find the gihub for the project where all the code and documentation can be found.</p>
 <section id="project-overview" class="level4">
 <h4 class="anchored" data-anchor-id="project-overview">Project Overview</h4>
 <p>The primary objective is to understand how public discourse, as seen in Twitter social media, frames mental health issues within the realm of professional international sports. We use sentiment analysis to capture the attitude of the public’s reaction. We then use topic modelling to identify common themes present in the tweets, and finally word vectorization to map topics to words and emotions.</p>
@@ -316,7 +317,7 @@ Fig 3. Bar Chart of Hashtags.
 <h3 class="anchored" data-anchor-id="natural-language-processing">Natural Language Processing</h3>
 <section id="preprocessing" class="level4">
 <h4 class="anchored" data-anchor-id="preprocessing">Preprocessing</h4>
-<p>To prepare for NLP, we further preprocessed the tweet data to standardize it, focusing on the pure textual content. We followed preprocessing protocol by first removing all punctuation and special characters, as well as any stop words like “the” and “and” which don’t carry meaningful information. Tweets were then lemmatized, breaking down words to their root form (e.g.&nbsp;‘flipping’ <span class="math inline">\(\rightarrow\)</span> ‘flip’), which typically improves NLP results. We did our best to remove junk tweets, and decided to remove all links and url patterns from the text as well, to focus on the textual content of each tweet.</p>
+<p>To prepare for NLP, we further preprocessed the tweet data to standardize it, focusing on the pure textual content. We followed preprocessing protocol by first removing all punctuation and special characters, as well as any stop words like “the,” “is,” and “and” which don’t carry meaningful information. Tweets were then lemmatized, breaking down words to their root form (e.g.&nbsp;‘flipping’ <span class="math inline">\(\rightarrow\)</span> ‘flip’), which typically improves NLP results. We did our best to remove junk tweets, and decided to remove all links and url patterns from the text as well, to focus on the textual content of each tweet.</p>
 </section>
 <section id="sentiment-analysis" class="level4">
 <h4 class="anchored" data-anchor-id="sentiment-analysis">Sentiment Analysis</h4>
@@ -326,7 +327,8 @@ Fig 3. Bar Chart of Hashtags.
 <li><strong>Neutral sentiment</strong>: Scores around 0 indicate neutral sentiment.</li>
 <li><strong>Positive sentiment</strong>: Scores closer to 1 indicate positive sentiment.</li>
 </ul>
-<p>Each tweet in the dataset was processed through the VADER tool to generate sentiment scores. The distribution of sentiment scores across the dataset was analyzed to identify overall trends and patterns. This analysis included calculating the proportion of positive, negative, and neutral tweets. The sentiment analysis results set the foundation for further investigation into the public’s perception of athletes’ mental health and provided a contextual basis for the subsequent topic modeling.</p>
+<p>Each tweet in the dataset was processed through the VADER tool to generate sentiment scores. The distribution of sentiment scores across the dataset was analyzed and the proportion of positive, negative, and neutral tweets, was calculated. Further analysis was conducted to compare sentiment scores from tweets that came from before and after Biles’ announcement, and isolating tweets that specifically discuss mental health to identify different sentiment patterns.</p>
+<p>The sentiment analysis results set the foundation for further investigation into the public’s perception of athletes’ mental health and provided a contextual basis for the subsequent topic modeling.</p>
 </section>
 <section id="non-negative-matrix-factorization" class="level4">
 <h4 class="anchored" data-anchor-id="non-negative-matrix-factorization">Non-negative Matrix Factorization</h4>
@@ -338,36 +340,185 @@ Fig 3. Bar Chart of Hashtags.
 <li><strong>Parameter Selection</strong>: The number of topics was determined by evaluating the coherence scores and conducting manual inspections to ensure meaningful and distinct topics.</li>
 <li><strong>Process</strong>: The preprocessed tweet data was vectorized using Term Frequency-Inverse Document Frequency (TF-IDF) to create the term-document matrix. This matrix was then decomposed using NMF.</li>
 </ul>
-<p>The resulting topics were analyzed and labeled based on the most representative terms and example tweets for each topic. Each topic was defined by a set of high-weighted words, providing insights into the key themes discussed in relation to Simone Biles’ mental health.</p>
+<p>The resulting topics were analyzed and ordered by thematic prominence within the dataset. Each topic was defined by a set of high-weighted words, providing insights into the key themes discussed in relation to Simone Biles’ mental health.</p>
+<p>To gain further insights into these topics, the top 10 weighted words from each topic were embedded into a vector space using the <a href="https://huggingface.co/fse/word2vec-google-news-300">word2vec Google News 300</a> word embeddings. These vectors were averaged to generate a single vector per topic, which was then mapped back to the closest word in the embedding space, identifying a single representative word for each topic. Additionally, the emotional sentiment of each topic was inferred using a similar embedding approach, associating each topic with the closest emotion word.</p>
 </section>
 </section>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
-<p>This allowed us to produce a histogram of sentiment scores for all tweets in the dataset.</p>
+<section id="sentiment-analysis-1" class="level4">
+<h4 class="anchored" data-anchor-id="sentiment-analysis-1">Sentiment Analysis</h4>
+<p>The sentiment analysis revealed insightful trends in the public’s reaction to Simone Biles’ mental health disclosure. A histogram plot of the sentiment scores distribution for all tweets in the dataset indicated that the majority of sentiment scores were close to neutral, with a slight skew towards positive sentiments. This suggests that, overall, the public sentiment towards Simone Biles during this period was more supportive than critical. This surprised the team, as we expected a significant negative sentiment to be present.</p>
 <figure style="margin-right: 30px; text-align: center;" class="figure">
 <img src="Sentiment.png" alt="Histogram showing distribution of tweets' sentiment scores." width="700" class="figure-img">
 <figcaption>
 Fig 4. Histogram distribution of sentiment scores for tweets.
 </figcaption>
 </figure>
-<p>Interestingly, this</p>
+<p>Further analysis was conducted to compare sentiment scores before and after Biles’ announcement. Histogram plots for each period visually appeared similar, implying no significant change in sentiment of tweets before and after Biles announced her withdrawal. The average sentiment score before her withdrawal was 0.172, and after was 0.174. A t-test confirmed no statistically significant difference between the means, indicating that Biles’ announcement did not drastically alter public sentiment.</p>
+<ul>
+<li>insert figure *</li>
+</ul>
+<p>Another split on the dataset was conducted to examine whether tweets specifically discussing mental health exhibited different sentiment patterns, which was done by isolating tweets containing mental health awareness keywords and hashtags. The sentiment distribution of these tweets, compared to those without such keywords, showed that mental health-related tweets had slightly more extreme positive sentiment scores. The average sentiment for mental health tweets was 0.173, while for non-mental health tweets, it was 0.163. However, a t-test found no significant difference between these means, suggesting that the overall sentiment towards mental health topics in the context of Biles’ situation remained consistent with the general sentiment.</p>
+<ul>
+<li>insert figure *</li>
+</ul>
+</section>
+<section id="topic-modelling" class="level4">
+<h4 class="anchored" data-anchor-id="topic-modelling">Topic Modelling</h4>
+<p>The topic modeling analysis using Non-Negative Matrix Factorization (NMF) successfully identified several key themes within the tweets. In NMF, topics are ordered by prevalence, and each topic is defined by a set of high-weighted words, as well as its average word and most closely associated emotion. The 5 most prominent topics among this set of tweets are listed below (Fig 6.).</p>
+<style>
+  .styled-table {
+    width: 80%;
+    margin-left: 20px; 
+    border-collapse: collapse;
+    text-align: left;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+  }
+  .styled-table th, .styled-table td {
+    padding: 10px;
+    border-bottom: 1px solid lightgray;
+  }
+  .styled-table th {
+    border-bottom: 1px solid black;
+  }
+  .styled-table th:first-child {
+    text-align: center; 
+  }
+  .styled-table tr:last-child td {
+    border-bottom: none;
+  }
+  .styled-table td:first-child {
+    text-align: center; 
+  }
+</style>
+<table class="styled-table">
+<tbody><tr>
+<th>
+Topic
+</th>
+<th>
+Associated Words
+</th>
+<th>
+Average Word
+</th>
+<th>
+Closest Emotion
+</th>
+</tr>
+<tr>
+<td>
+1
+</td>
+<td>
+olympics, watching, beam
+</td>
+<td>
+watch
+</td>
+<td>
+love
+</td>
+</tr>
+<tr>
+<td>
+2
+</td>
+<td>
+misogyoir, racism, sexism
+</td>
+<td>
+racism
+</td>
+<td>
+hostility
+</td>
+</tr>
+<tr>
+<td>
+3
+</td>
+<td>
+simonebiles, mental, health
+</td>
+<td>
+mental
+</td>
+<td>
+loneliness
+</td>
+</tr>
+<tr>
+<td>
+4
+</td>
+<td>
+suni lee, bars, amazing
+</td>
+<td>
+congrats
+</td>
+<td>
+love
+</td>
+</tr>
+<tr>
+<td>
+5
+</td>
+<td>
+rapinoe, zanetti, mamute
+</td>
+<td>
+win
+</td>
+<td>
+admiration
+</td>
+</tr>
+</tbody></table>
+<p><br>
+</p>
+<p><strong>Topic 1</strong>: This topic clearly encapsulates the general enthusiasm and engagement with the Olympic events. The closest word to this topic vector was “watch,” with the associated emotion being “love,” indicating a positive and supportive sentiment among the public towards the Olympics.</p>
+<p><strong>Topic 2</strong>: This topic appears to center on discussions of racial and gender-based discrimination. The word “racism” was the closest match to the topic vector, with “hostility” being the closest emotion, reflecting the critical and adversarial nature of these conversations.</p>
+<p><strong>Topic 3</strong>: This topic appears to capture the conversation surrounding Biles and her mental health struggle. The closest word representing this topic was “mental,” with “loneliness” as the associated emotion. This suggests a strong emphasis on mental health issues and a sense of isolation or struggle associated with such discussions.</p>
+<p><strong>Topic 4</strong>: This topic captured expressions of admiration and congratulations, particularly directed at fellow gymnast Suni Lee. The closest word was “congrats,” with the emotion “love,” indicating a celebratory and supportive sentiment.</p>
+<p>The most dominant topic here suggests that a significant portion of the twitter discourse on gymnastics was driven by general excitement and positive engagement with the Olympics and Team USA’s performance. This finding indicates that despite the gravity of Biles’ announcement, the overarching public attention remained on the broader spectacle of the Games.</p>
+<p>The presence of topics like “racism,” and “sexism” highlight that discussions around Biles’ withdrawal also inevitably intersect with broader societal issues, indicating that public discourse on mental health in athletes is not isolated but intertwined with other dimensions of social justice, underscoring the complexity of public perceptions and the multifaceted nature of the discourse.</p>
+<p>The third topic directly relates to mental health, and indicates that while there was substantial discourse focused on Biles’ mental health, it was less prevalent than the excitement for the Olympics and other discussions of racism and sexism social issues. The sentiment of “loneliness” associated with this topic also seems to suggest that public discussions on mental health were tinged with a recognition of the isolation and personal struggle involved. This could imply empathy for Biles, as well as an acknowledgment of the broader challenges faced by athletes when they address mental health issues publicly, but overall the conversations captured by this theme seem to be sympathetic towards Biles and her mental health struggles.</p>
+</section>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<p>Regarding the initial research statement, which sought to understand the public sentiment towards athletes’ mental health, the findings suggest a dual narrative. On one hand, the significant focus on mental health and the empathetic sentiment of “loneliness” indicate that the public is becoming more aware and potentially more supportive of athletes prioritizing their mental well-being. On the other hand, the lesser prominence of this topic compared to others highlights that while there is growing support, mental health is still not the dominant narrative in public discourse surrounding athletes.</p>
+<p>Furthermore, the intersection of mental health discussions with broader societal issues such as racism and sexism reveals that public sentiment towards athletes’ mental health cannot be viewed in isolation. It is intricately linked with other dimensions of social justice, indicating that the support for mental health is also influenced by the public’s stance on these broader issues.</p>
+<p>In conclusion, the public sentiment towards athletes’ mental health, as observed through the analysis of tweets during the Tokyo Olympics, appears to be empathetic yet secondary to broader themes of Olympic excitement and social justice discussions. The discourse reflects a growing recognition of the importance of mental health but also underscores the need for continued efforts to elevate these conversations to the forefront of public attention. This duality emphasizes the ongoing challenge of destigmatizing mental health issues in the athletic arena and fostering a more supportive environment for athletes addressing these concerns.</p>
+<section id="limitations-and-future-research" class="level4">
+<h4 class="anchored" data-anchor-id="limitations-and-future-research">Limitations and Future Research</h4>
+<p>While this analysis provides valuable insights into public discourse surrounding Simone Biles’ withdrawal from the Tokyo Olympics, several limitations should be acknowledged. One significant limitation is the focus on a single event and specific athlete, which may not capture the full spectrum of public sentiment towards athletes’ mental health. Future research should aim to gather and analyze data related to public discourse on mental health in other high-profile athletes. By examining a broader range of incidents where athletes have publicly addressed their mental health, researchers can achieve a more comprehensive understanding of public sentiment.</p>
+<p>Additionally, expanding the temporal scope of data collection would be beneficial. By examining events over a longer period, researchers can identify trends and shifts in public discourse, enhancing the understanding of how societal attitudes towards athletes’ mental health evolve and what factors influence these changes. Including data from other social media platforms and news sources could also provide a more holistic view of public sentiment, as different platforms may host varied demographics and types of discourse, offering a richer and more nuanced understanding of public opinion.</p>
+<p>Future research should also delve deeper into the intersectionality of issues identified in the current study, such as how discussions on mental health intertwine with topics like racism and sexism across different contexts and athlete demographics. Employing more sophisticated sentiment analysis techniques, such as deep learning-based models, could further enhance the accuracy and depth of emotional sentiment extraction from the text, uncovering subtler nuances in the public’s emotional reactions. These advanced methods would contribute to a more detailed and precise understanding of public sentiment towards athletes’ mental health.</p>
 <p>.</p>
-<p>. .</p>
-<p>.</p>
-<p>.</p>
-<p>.</p>
-<p>. .</p>
 <p>.</p>
 <p>.</p>
 <p>.</p>
 <p>.</p>
-<p>. . . . . . . . . . . . .</p>
-<p>To prepare the data for analysis we first extracted the entities from each tweet to store them individually to make analysis easier. Many features of the dataset were not utilized in this analysis - for example, columns relating to unique tweet and author ID numbers, IDs of referenced tweets, information about any withheld content, and the edit history of tweets.</p>
-<p>Utilizing TextBlob, a python sentiment library, we were able to assign a sentiment score to each tweet, acting as an estimate of the overall positive or negative attitude. This is achieved with a word lexicon that assigns a score to most english words, and those scores are averaged to give an estimate of the overall sentiment of a tweet. With this we were able to give every tweet a sentiment score and analyze the changes and patterns in sentiments over time and within different groups.</p>
-<p>NMF: <strong>Understanding the Output:</strong> - <strong>Top Words</strong>: The top words for each topic were examined to understand the main themes. - <strong>Example Tweets</strong>: Representative tweets were reviewed to provide context and validate the relevance of the topics. - <strong>Topic Distribution</strong>: The prevalence of each topic across the dataset was analyzed to identify dominant themes and trends over time.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>While this analysis provides valuable insights into public discourse surrounding Simone Biles’ withdrawal from the Tokyo Olympics, some limitations should be acknowledged.</p>
+<p>One key limitation is the focus on a single event and a specific athlete, which may not capture the full spectrum of public sentiment towards athletes’ mental health. Future research may aim to gather and analyze data related to public discourse on mental health in other high-profile athletes. Gathering data on a broader range of incidents where athletes have publicly addressed their mental health would provide a more comprehensive understanding of public sentiment.</p>
+<p>Additionally, more diversity in data through time would be beneficial. By examining events over a longer period of time, researchers can identify trends and shifts in public discourse. This could help in understanding how societal attitudes towards athletes’ mental health evolve and the factors influencing these changes.</p>
+<p>Moreover, expanding the analysis to include other social media platforms and news sources could provide a more holistic view of public sentiment. Different platforms may host varied demographics and types of discourse, offering a richer and more nuanced understanding of public opinion.</p>
+<p>Another avenue for future research is to delve deeper into the intersectionality of issues identified in the current study. Investigating how discussions on mental health intertwine with topics like racism and sexism across different contexts and athlete demographics could provide further insights into the complexities of public perception.</p>
+<p>Lastly, employing more sophisticated sentiment analysis techniques, such as deep learning-based models, could enhance the accuracy and depth of emotional sentiment extraction from the text. These advanced methods may uncover subtler nuances in the public’s emotional reactions.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
