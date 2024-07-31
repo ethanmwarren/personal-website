@@ -209,7 +209,9 @@ The topic modeling analysis using Non-Negative Matrix Factorization (NMF) succes
     <td>win</td>
     <td>admiration</td>
   </tr>
-</table> \
+</table> 
+
+\
 
 **Topic 1**: This topic clearly encapsulates the general enthusiasm and engagement with the Olympic events. The closest word to this topic vector was "watch," with the associated emotion being "love," indicating a positive and supportive sentiment among the public towards the Olympics.
 
